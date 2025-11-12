@@ -244,6 +244,9 @@ void power(void) {
 
 //        if (ina226_ready()) {
         if (inaReady && ina226_ready()) {
+#ifdef USE_UART
+            char ustr[10];
+#endif
             char str[16];
             char *s;
             int32_t microAmps;
@@ -259,9 +262,9 @@ void power(void) {
                 totalTime += inaTime;
 
 #ifdef USE_UART
-                itoa(microAmps, str, 10);
-                strcat(str, "\r\n");
-                uartPrint(str);
+                itoa(microAmps, ustr, 10);
+                strcat(ustr, "\r\n");
+                uartPrint(ustr);
 #endif
 
                 screen_clear();
@@ -312,3 +315,4 @@ void __attribute__((interrupt("WCH-Interrupt-fast"))) EXTI7_0_IRQHandler(void) {
     EXTI->INTFR = 1 << 4;
 #endif
 }
+
